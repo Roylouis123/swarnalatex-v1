@@ -11,7 +11,6 @@ import { deleteObject, getStorage } from "firebase/storage";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { v4 as uuidv4 } from "uuid";
-import UploadImg from "../AdminPanel/UploadImg.png";
 
 import {
   Card,
@@ -191,7 +190,7 @@ function Form() {
   };
 
   const handleDelete = async (product) => {
-    
+
     const cityRef = doc(db, "users", product.Id);
     await deleteDoc(cityRef);
     const imageRef = ref(storage, `images/${product.ProductID}`);
@@ -251,7 +250,7 @@ function Form() {
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={4} md={12}>
+                  <Grid item xs={4}>
                     <input
                       accept="image/*"
                       className={classes.input}

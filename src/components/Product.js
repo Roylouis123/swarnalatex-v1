@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, Chip, Stack, IconButton } from "@mui/material";
 import NavBar from "../AdminPanel/NavBar";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../Containers/Firebase";
 import { map, filter } from "lodash";
 
@@ -20,56 +20,59 @@ export default function Product(props) {
    const [selectedstroke, setSelectedstroke] = useState([]);
    const [selectedLinnings, setSelectedLinnings] = useState([]);
    const [Alldata, setAlldata] = useState()
+   const [selectedProductID, setSelectedProductID] = useState("");
+   const [selectedProductName, setSelectedProductName] = useState([]);
 
-   console.log(Alldata)
+
 
 
    useEffect(() => {
       setAlldata({
+         ProductID: selectedProductID,
          usetypes: usetypes,
          Size: selectedSizes,
          Color: selectedColors,
          Stroke: selectedstroke,
          Linning: selectedLinnings,
       })
-   }, [usetypes, selectedSizes, selectedColors, selectedstroke, selectedLinnings])
+   }, [selectedProductName, usetypes, selectedSizes, selectedColors, selectedstroke, selectedLinnings])
 
 
 
-   console.log(selectedSizes);
-   console.log(selectedLinnings);
-   const fetchData = async () => {
+   const fetchData = () => {
       const querys = collection(db, "users");
-      const querySnapshot = await getDocs(querys);
-      const caall = [];
-      querySnapshot.forEach((doc) => {
-         caall.push(doc.data());
-      });
+      onSnapshot(querys, (querySnapshot) => {
+         const caall = [];
+         querySnapshot.forEach((doc) => {
+            caall.push(doc.data());
 
-      const formattedData = map(caall, (item) => {
-         const formattedLinning = map(item.selectedLinning, (Linning) => ({
-            Linning: Linning,
-         }));
-         const formattedSizes = map(item.selectedSizes, (Size) => ({
-            Size: Size,
-         }));
-         const formattedColors = map(item.selectedColors, (Colors) => ({
-            Colors: Colors,
-         }));
-         const formattedstroke = map(item.selectedstroke, (Stroke) => ({
-            Stroke: Stroke,
-         }));
+         });
+         const formattedData = map(caall, (item) => {
+            const formattedLinning = map(item.selectedLinning, (Linning) => ({
+               Linning: Linning,
+            }));
+            const formattedSizes = map(item.selectedSizes, (Size) => ({
+               Size: Size,
+            }));
+            const formattedColors = map(item.selectedColors, (Colors) => ({
+               Colors: Colors,
+            }));
+            const formattedstroke = map(item.selectedstroke, (Stroke) => ({
+               Stroke: Stroke,
+            }));
+            return {
+               ...item,
+               selectedLinning: formattedLinning,
+               selectedSizes: formattedSizes,
+               selectedColors: formattedColors,
+               selectedstroke: formattedstroke,
+            };
+         });
 
-         return {
-            ...item,
-            selectedLinning: formattedLinning,
-            selectedSizes: formattedSizes,
-            selectedColors: formattedColors,
-            selectedstroke: formattedstroke,
-         };
-      });
-      setProduct(formattedData);
-      console.log(formattedData);
+         setProduct(formattedData);
+
+
+      })
    };
 
    useEffect(() => {
@@ -80,8 +83,20 @@ export default function Product(props) {
       setusetypes(data.value);
 
       const filteredProducts = filter(product, (p) => p.usetypes === data.value);
-      setselecteddata(filteredProducts);
+      setSelectedProductName(filteredProducts);
+      setselecteddata([]);
    };
+
+
+
+   const handleClick1 = (data) => {
+      setSelectedProductID(data);
+      const filteredProductID = filter(selectedProductName, (p) => p.ProductID === data);
+      setselecteddata(filteredProductID);
+
+   };
+
+
 
    function handleSizeClick(size) {
       if (!selectedSizes.includes(size)) {
@@ -114,6 +129,11 @@ export default function Product(props) {
          setSelectedstroke(selectedstroke.filter((s) => s !== Stroke));
       }
    }
+
+
+
+
+
 
    return (
       <Box>
@@ -148,7 +168,7 @@ export default function Product(props) {
                >
                   Bistow
                </Typography>
-               <Stack direction="row" spacing={1} my={2}>
+               <Stack direction="row" spacing={1} my={2} alignItems="center">
                   <Typography variant="h5">Types : </Typography>
                   {map(UseType, (u, i) => (
                      <IconButton key={i} onClick={() => handleClick(u)}>
@@ -157,8 +177,17 @@ export default function Product(props) {
                   ))}
                </Stack>
 
-               <Stack direction="row" spacing={1} my={2}>
-                  <Typography variant="h5">Sizes : </Typography>
+               <Stack direction="row" spacing={1} my={2} alignItems="center">
+                  <Typography variant="h5">Available Models : </Typography>
+                  {map(selectedProductName, (u, i) => (
+                     <IconButton key={i} onClick={() => handleClick1(u.ProductID)}>
+                        <Chip label={u.ProductID} variant="outlined" />
+                     </IconButton>
+                  ))}
+               </Stack>
+
+               <Stack direction="row" spacing={1} my={2} alignItems="center">
+                  <Typography variant="h5">Available Sizes : </Typography>
                   {map(selecteddata, (o, i) =>
                      map(o.selectedSizes, (u) => (
                         <IconButton
@@ -171,7 +200,6 @@ export default function Product(props) {
                               label={u.Size}
                               variant="outlined"
                               selected={selectedSizes.includes(u.Size)}
-                              // Add a custom active color
                               sx={{
                                  backgroundColor: selectedSizes.includes(u.Size)
                                     ? "orange"
@@ -184,8 +212,8 @@ export default function Product(props) {
                   )}
                </Stack>
 
-               <Stack direction="row" spacing={1} my={2}>
-                  <Typography variant="h5">Linning : </Typography>
+               <Stack direction="row" spacing={1} my={2} alignItems="center">
+                  <Typography variant="h5">Available Linning : </Typography>
                   {map(selecteddata, (o, i) => (
                      map(o.selectedLinning, (u) => (
                         <IconButton item xs="auto" onClick={() => handleLinningClick(u.Linning)}>
@@ -194,7 +222,6 @@ export default function Product(props) {
                               label={u.Linning}
                               variant="outlined"
                               selected={selectedLinnings.includes(u.Linning)}
-                              // Add a custom active color
                               sx={{
                                  backgroundColor: selectedLinnings.includes(u.Linning) ? "orange" : "white",
                                  borderColor: "rgb(0,0,0,0.87)",
@@ -205,8 +232,8 @@ export default function Product(props) {
                   ))}
                </Stack>
 
-               <Stack direction="row" spacing={1} my={2}>
-                  <Typography variant="h5">Colors : </Typography>
+               <Stack direction="row" spacing={1} my={2} alignItems="center">
+                  <Typography variant="h5">Available Colors : </Typography>
                   {map(selecteddata, (o, i) => (
                      map(o.selectedColors, (u) => (
                         <IconButton item xs="auto" onClick={() => handleColorsClick(u.Colors)}>
@@ -215,7 +242,6 @@ export default function Product(props) {
                               label={u.Colors}
                               variant="outlined"
                               selected={selectedColors.includes(u.Colors)}
-                              // Add a custom active color
                               sx={{
                                  backgroundColor: selectedColors.includes(u.Colors) ? "orange" : "white",
                                  borderColor: "rgb(0,0,0,0.87)",
@@ -226,8 +252,8 @@ export default function Product(props) {
                   ))}
                </Stack>
 
-               <Stack direction="row" spacing={1} my={2}>
-                  <Typography variant="h5">stroke : </Typography>
+               <Stack direction="row" spacing={1} my={2} alignItems="center">
+                  <Typography variant="h5">Available Stroke : </Typography>
                   {map(selecteddata, (o, i) => (
                      map(o.selectedstroke, (u) => (
                         <IconButton item xs="auto" onClick={() => handlestrokeClick(u.Stroke)}>
@@ -236,7 +262,6 @@ export default function Product(props) {
                               label={u.Stroke}
                               variant="outlined"
                               selected={selectedstroke.includes(u.Stroke)}
-                              // Add a custom active color
                               sx={{
                                  backgroundColor: selectedstroke.includes(u.Stroke) ? "orange" : "white",
                                  borderColor: "rgb(0,0,0,0.87)",

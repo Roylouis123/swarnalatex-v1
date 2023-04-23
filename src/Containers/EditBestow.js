@@ -152,7 +152,7 @@ function EditBestow(props) {
     setSelectedSizes([]);
     setImage(null);
     settempimage(null);
-    
+
     window.location.reload();
   };
 
