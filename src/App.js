@@ -9,9 +9,14 @@ import AdminDashbaord from './AdminPanel/AdminDashbaord'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Bestow from './Containers/Bestow';
 
+
 function App() {
+
+
+  
   return (
     <BrowserRouter>
+
     
         <Routes>
           <Route path="/" element={<Hero />}/>
@@ -21,6 +26,8 @@ function App() {
           <Route path="/Admin" element={<AdminDashbaord/>}/>
           <Route path="/Bestow" element={<Bestow/>}/>
         </Routes>
+
+
     </BrowserRouter>
     
   );

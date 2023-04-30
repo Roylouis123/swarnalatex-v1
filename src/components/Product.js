@@ -1,15 +1,15 @@
-import { Box, Grid, Typography, Chip, Stack, IconButton } from "@mui/material";
+import { Box, Grid, Typography, Chip, Stack, Button, Modal } from "@mui/material";
 import NavBar from "../AdminPanel/NavBar";
 import { useEffect, useState } from "react";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../Containers/Firebase";
 import { map, filter } from "lodash";
+import Checkout from "./CheckoutForm/Checkout";
+import { UseType } from "../Containers/JsonForm";
 
-const UseType = [
-   { value: "Industrial", label: "Industrial" },
-   { value: "Household", label: "Household" },
-   { value: "Industrial/Household", label: "Industrial/Household" },
-];
+
+
+
 
 export default function Product(props) {
    const [product, setProduct] = useState([]);
@@ -36,7 +36,6 @@ export default function Product(props) {
          Linning: selectedLinnings,
       })
    }, [selectedProductName, usetypes, selectedSizes, selectedColors, selectedstroke, selectedLinnings])
-
 
 
    const fetchData = () => {
@@ -85,6 +84,10 @@ export default function Product(props) {
       const filteredProducts = filter(product, (p) => p.usetypes === data.value);
       setSelectedProductName(filteredProducts);
       setselecteddata([]);
+      setSelectedSizes("")
+      setSelectedColors("")
+      setSelectedstroke("")
+      setSelectedLinnings("")
    };
 
 
@@ -93,41 +96,36 @@ export default function Product(props) {
       setSelectedProductID(data);
       const filteredProductID = filter(selectedProductName, (p) => p.ProductID === data);
       setselecteddata(filteredProductID);
-
+      setSelectedSizes("")
+      setSelectedColors("")
+      setSelectedstroke("")
+      setSelectedLinnings("")
    };
 
 
 
+
+
+
+
    function handleSizeClick(size) {
-      if (!selectedSizes.includes(size)) {
-         setSelectedSizes([...selectedSizes, size]);
+      if (selectedLinnings.includes(size)) {
+         setSelectedSizes(selectedLinnings.filter((l) => l !== size));
       } else {
-         setSelectedSizes(selectedSizes.filter((s) => s !== size));
+         setSelectedSizes([...selectedLinnings, size]);
       }
    }
 
    function handleLinningClick(Linning) {
-      if (!selectedLinnings.includes(Linning)) {
-         setSelectedLinnings([...selectedLinnings, Linning]);
-      } else {
-         setSelectedLinnings(selectedLinnings.filter((s) => s !== Linning));
-      }
+      setSelectedLinnings(Linning);
    }
 
    function handleColorsClick(Colors) {
-      if (!selectedColors.includes(Colors)) {
-         setSelectedColors([...selectedColors, Colors]);
-      } else {
-         setSelectedColors(selectedColors.filter((s) => s !== Colors));
-      }
+      setSelectedColors(Colors);
    }
 
    function handlestrokeClick(Stroke) {
-      if (!selectedstroke.includes(Stroke)) {
-         setSelectedstroke([...selectedstroke, Stroke]);
-      } else {
-         setSelectedstroke(selectedstroke.filter((s) => s !== Stroke));
-      }
+      setSelectedstroke(Stroke);
    }
 
 
@@ -171,18 +169,18 @@ export default function Product(props) {
                <Stack direction="row" spacing={1} my={2} alignItems="center">
                   <Typography variant="h5">Types : </Typography>
                   {map(UseType, (u, i) => (
-                     <IconButton key={i} onClick={() => handleClick(u)}>
-                        <Chip label={u.value} variant="outlined" />
-                     </IconButton>
+                     <Box key={i} onClick={() => handleClick(u)}>
+                        <Chip sx={{ cursor: "pointer" }} label={u.value} variant="outlined" />
+                     </Box>
                   ))}
                </Stack>
 
                <Stack direction="row" spacing={1} my={2} alignItems="center">
                   <Typography variant="h5">Available Models : </Typography>
                   {map(selectedProductName, (u, i) => (
-                     <IconButton key={i} onClick={() => handleClick1(u.ProductID)}>
-                        <Chip label={u.ProductID} variant="outlined" />
-                     </IconButton>
+                     <Box key={i} onClick={() => handleClick1(u.ProductID)}>
+                        <Chip sx={{ cursor: "pointer" }} label={u.ProductID} variant="outlined" />
+                     </Box>
                   ))}
                </Stack>
 
@@ -190,7 +188,7 @@ export default function Product(props) {
                   <Typography variant="h5">Available Sizes : </Typography>
                   {map(selecteddata, (o, i) =>
                      map(o.selectedSizes, (u) => (
-                        <IconButton
+                        <Box
                            key={i}
                            item
                            xs="auto"
@@ -205,9 +203,10 @@ export default function Product(props) {
                                     ? "orange"
                                     : "white",
                                  borderColor: "rgb(0,0,0,0.87)",
+                                 cursor: "pointer",
                               }}
                            />
-                        </IconButton>
+                        </Box>
                      ))
                   )}
                </Stack>
@@ -216,7 +215,7 @@ export default function Product(props) {
                   <Typography variant="h5">Available Linning : </Typography>
                   {map(selecteddata, (o, i) => (
                      map(o.selectedLinning, (u) => (
-                        <IconButton item xs="auto" onClick={() => handleLinningClick(u.Linning)}>
+                        <Box item xs="auto" onClick={() => handleLinningClick(u.Linning)}>
                            <Chip
                               key={i}
                               label={u.Linning}
@@ -225,9 +224,10 @@ export default function Product(props) {
                               sx={{
                                  backgroundColor: selectedLinnings.includes(u.Linning) ? "orange" : "white",
                                  borderColor: "rgb(0,0,0,0.87)",
+                                 cursor: "pointer",
                               }}
                            />
-                        </IconButton>
+                        </Box>
                      ))
                   ))}
                </Stack>
@@ -236,7 +236,7 @@ export default function Product(props) {
                   <Typography variant="h5">Available Colors : </Typography>
                   {map(selecteddata, (o, i) => (
                      map(o.selectedColors, (u) => (
-                        <IconButton item xs="auto" onClick={() => handleColorsClick(u.Colors)}>
+                        <Box item xs="auto" onClick={() => handleColorsClick(u.Colors)}>
                            <Chip
                               key={i}
                               label={u.Colors}
@@ -245,9 +245,10 @@ export default function Product(props) {
                               sx={{
                                  backgroundColor: selectedColors.includes(u.Colors) ? "orange" : "white",
                                  borderColor: "rgb(0,0,0,0.87)",
+                                 cursor: "pointer",
                               }}
                            />
-                        </IconButton>
+                        </Box>
                      ))
                   ))}
                </Stack>
@@ -256,7 +257,7 @@ export default function Product(props) {
                   <Typography variant="h5">Available Stroke : </Typography>
                   {map(selecteddata, (o, i) => (
                      map(o.selectedstroke, (u) => (
-                        <IconButton item xs="auto" onClick={() => handlestrokeClick(u.Stroke)}>
+                        <Box item xs="auto" onClick={() => handlestrokeClick(u.Stroke)}>
                            <Chip
                               key={i}
                               label={u.Stroke}
@@ -265,12 +266,16 @@ export default function Product(props) {
                               sx={{
                                  backgroundColor: selectedstroke.includes(u.Stroke) ? "orange" : "white",
                                  borderColor: "rgb(0,0,0,0.87)",
+                                 cursor: "pointer",
                               }}
                            />
-                        </IconButton>
+                        </Box>
                      ))
                   ))}
                </Stack>
+
+
+               <MyComponent Alldata={Alldata} />
 
 
             </Grid>
@@ -278,3 +283,37 @@ export default function Product(props) {
       </Box>
    );
 }
+
+
+const MyComponent = ({ Alldata }) => {
+
+
+   const [open, setOpen] = useState(false);
+
+   const handleOpen = () => setOpen(true);
+   const handleClose = () => setOpen(false);
+
+   console.log(Alldata, "///////")
+
+
+
+   return (
+      <>
+         {Alldata?.Color && Alldata.Linning && Alldata.ProductID && Alldata.Size && Alldata.Stroke && Alldata.usetypes ? (
+            <Box>
+               <Button variant="contained" sx={{ width: "40%" }} onClick={handleOpen}>Checkout</Button>
+
+               <Modal
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+               >
+                  <Checkout />
+               </Modal>
+            </Box>
+         ) : null}
+      </>
+   );
+};
+
