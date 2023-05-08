@@ -28,8 +28,8 @@ export const Colors = [
 ];
 
 export const Sizes = [
-  { value: "X", label: "X" },
-  { value: "M", label: "M" },
-  { value: "L", label: "L" },
-  { value: "XL", label: "XL" },
+  { value: "SMALL", label: "X" },
+  { value: "MEDIUM", label: "M" },
+  { value: "LARGE", label: "L" },
+  { value: "X-LARGE", label: "XL" },
 ];

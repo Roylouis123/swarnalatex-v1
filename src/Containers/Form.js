@@ -180,17 +180,16 @@ function Form() {
       caall.push(doc.data());
     });
     setData(caall);
-    console.log(caall)
+    console.log(caall);
   };
 
-  const storage = getStorage();;
+  const storage = getStorage();
   const handleEdit = (data) => {
     seteditData(data);
     setonEdit(true);
   };
 
   const handleDelete = async (product) => {
-
     const cityRef = doc(db, "users", product.Id);
     await deleteDoc(cityRef);
     const imageRef = ref(storage, `images/${product.ProductID}`);
@@ -506,11 +505,7 @@ function Form() {
                       </Typography>
 
                       <Grid item xs="auto">
-                        <Typography
-
-                        >
-                          {u.usetypes}
-                        </Typography>
+                        <Typography>{u.usetypes}</Typography>
                       </Grid>
                     </Grid>
                   </Box>
