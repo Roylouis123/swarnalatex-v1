@@ -7,23 +7,21 @@ import {
   Button,
   Modal,
 } from "@mui/material";
-import NavBar from "../AdminPanel/NavBar";
 import { useEffect, useState } from "react";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
-import { db } from "../Containers/Firebase";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../../Containers/Firebase";
 import { map, filter } from "lodash";
-import Checkout from "./CheckoutForm/Checkout";
-import { UseType } from "../Containers/JsonForm";
+import Checkout from "../CheckoutForm/Checkout";
+import heroImg from "../../assets/hero.png";
 
-export default function Product(props) {
+export default function Bestow() {
   const [product, setProduct] = useState([]);
   const [usetypes, setusetypes] = useState("");
-  const [selecteddata, setselecteddata] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState("");
+  const [selectedColors, setSelectedColors] = useState("");
   const [selectedstroke, setSelectedstroke] = useState([]);
-  const [selectedLinnings, setSelectedLinnings] = useState([]);
-  const [Alldata, setAlldata] = useState();
+  const [selectedLinnings, setSelectedLinnings] = useState("");
+  const [Alldata, setAlldata] = useState({});
   const [selectedProductID, setSelectedProductID] = useState("");
   const [selectedProductName, setSelectedProductName] = useState([]);
 
@@ -73,7 +71,6 @@ export default function Product(props) {
           selectedstroke: formattedstroke,
         };
       });
-
       setProduct(formattedData);
     });
   };
@@ -83,28 +80,15 @@ export default function Product(props) {
   }, []);
 
   const handleClick = (data) => {
-    setusetypes(data.value);
-
-    const filteredProducts = filter(product, (p) => p.usetypes === data.value);
-    setSelectedProductName(filteredProducts);
-    setselecteddata([]);
-    setSelectedSizes("");
-    setSelectedColors("");
-    setSelectedstroke("");
-    setSelectedLinnings("");
-  };
-
-  const handleClick1 = (data) => {
     setSelectedProductID(data);
-    const filteredProductID = filter(
-      selectedProductName,
-      (p) => p.ProductID === data
-    );
-    setselecteddata(filteredProductID);
-    setSelectedSizes("");
+
+    const filteredProducts = filter(product, (p) => p.Id === data);
+    setSelectedProductName(filteredProducts);
     setSelectedColors("");
-    setSelectedstroke("");
     setSelectedLinnings("");
+    setSelectedSizes([]);
+    setSelectedstroke("");
+    setusetypes("");
   };
 
   function handleSizeClick(size) {
@@ -132,10 +116,9 @@ export default function Product(props) {
 
   return (
     <Box>
-      <NavBar />
       <Grid
         container
-        md={10}
+        md={12}
         px={2}
         py={4}
         sx={{
@@ -145,9 +128,18 @@ export default function Product(props) {
           margin: "auto",
         }}
       >
+        <Grid md={8}>
+          <Typography
+            variant="h3"
+            mb={2}
+            sx={{ backgroundColor: "orange", color: "white" }}
+          >
+            Bistow
+          </Typography>
+        </Grid>
         <Grid
           item
-          md={8}
+          md={6}
           py={4}
           pr={1}
           sx={{
@@ -156,30 +148,16 @@ export default function Product(props) {
             flexDirection: "column",
           }}
         >
-          <Typography
-            variant="h3"
-            mb={2}
-            sx={{ backgroundColor: "orange", color: "white" }}
-          >
-            Bistow
-          </Typography>
           <Stack direction="row" spacing={1} my={2} alignItems="center">
             <Typography variant="h5">Types : </Typography>
-            {map(UseType, (u, i) => (
-              <Box key={i} onClick={() => handleClick(u)}>
-                <Chip
-                  sx={{ cursor: "pointer" }}
-                  label={u.value}
-                  variant="outlined"
-                />
-              </Box>
-            ))}
-          </Stack>
-
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Available Models : </Typography>
-            {map(selectedProductName, (u, i) => (
-              <Box key={i} onClick={() => handleClick1(u.ProductID)}>
+            {map(product, (u, i) => (
+              <Box
+                key={i}
+                onClick={() => {
+                  handleClick(u.Id);
+                  setSelectedProductID(u.ProductID);
+                }}
+              >
                 <Chip
                   sx={{ cursor: "pointer" }}
                   label={u.ProductID}
@@ -190,14 +168,33 @@ export default function Product(props) {
           </Stack>
 
           <Stack direction="row" spacing={1} my={2} alignItems="center">
+            <Typography variant="h5">Available Models : </Typography>
+            {map(selectedProductName, (u, i) => (
+              <Box key={i}>
+                <Chip
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: "orange",
+                  }}
+                  label={u.usetypes}
+                  variant="outlined"
+                />
+              </Box>
+            ))}
+          </Stack>
+
+          <Stack direction="row" spacing={1} my={2} alignItems="center">
             <Typography variant="h5">Available Sizes : </Typography>
-            {map(selecteddata, (o, i) =>
+            {map(selectedProductName, (o, i) =>
               map(o.selectedSizes, (u) => (
                 <Box
                   key={i}
                   item
                   xs="auto"
-                  onClick={() => handleSizeClick(u.Size)}
+                  onClick={() => {
+                    handleSizeClick(u.Size);
+                    setusetypes(o.usetypes);
+                  }}
                 >
                   <Chip
                     label={u.Size}
@@ -218,7 +215,7 @@ export default function Product(props) {
 
           <Stack direction="row" spacing={1} my={2} alignItems="center">
             <Typography variant="h5">Available Linning : </Typography>
-            {map(selecteddata, (o, i) =>
+            {map(selectedProductName, (o, i) =>
               map(o.selectedLinning, (u) => (
                 <Box
                   item
@@ -245,7 +242,7 @@ export default function Product(props) {
 
           <Stack direction="row" spacing={1} my={2} alignItems="center">
             <Typography variant="h5">Available Colors : </Typography>
-            {map(selecteddata, (o, i) =>
+            {map(selectedProductName, (o, i) =>
               map(o.selectedColors, (u) => (
                 <Box item xs="auto" onClick={() => handleColorsClick(u.Colors)}>
                   <Chip
@@ -268,7 +265,7 @@ export default function Product(props) {
 
           <Stack direction="row" spacing={1} my={2} alignItems="center">
             <Typography variant="h5">Available Stroke : </Typography>
-            {map(selecteddata, (o, i) =>
+            {map(selectedProductName, (o, i) =>
               map(o.selectedstroke, (u) => (
                 <Box item xs="auto" onClick={() => handlestrokeClick(u.Stroke)}>
                   <Chip
@@ -291,6 +288,19 @@ export default function Product(props) {
 
           <MyComponent Alldata={Alldata} />
         </Grid>
+        <Grid
+          item
+          md={2}
+          py={4}
+          pr={1}
+          sx={{
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <img style={{ width: "100%" }} src={heroImg} alt="Hero" />
+        </Grid>
       </Grid>
     </Box>
   );
@@ -302,14 +312,11 @@ const MyComponent = ({ Alldata }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  console.log(Alldata, "///////");
-
   return (
     <>
       {Alldata?.Color &&
       Alldata.Linning &&
       Alldata.ProductID &&
-      Alldata.Size &&
       Alldata.Stroke &&
       Alldata.usetypes ? (
         <Box>
@@ -330,7 +337,9 @@ const MyComponent = ({ Alldata }) => {
             <Checkout />
           </Modal>
         </Box>
-      ) : null}
+      ) : (
+        <></>
+      )}
     </>
   );
 };
