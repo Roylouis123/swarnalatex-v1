@@ -1,35 +1,132 @@
-import { Button, Box, Grid, Typography} from '@mui/material'
-import logo from './images/recycle.jpg'
-import styled from '@mui/material'
-import { Link } from 'react-router-dom'
+import * as React from "react";
 
+import AppBar from "@mui/material/AppBar";
 
-export default function NavBar () {
-    return (
-        <Box sx={{boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px'}}>
-            <Grid container px={2} py={3} sm={10} 
-            sx={{  
-                margin: 'auto',
-                display: 'flex',
-                justifyContent: 'space-between'
-            }} >
-                <Grid item 
-                sx={{height: '3rem'}}>
-                    <Typography variant="h3"><span style={{color: 'blue'}}>Swarna</span><span style={{color: 'yellow'}}>latex</span></Typography>
-                </Grid>
-                <Grid item
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                                     
-                }}>
-                    <Button my={2}><Link to="/Home" >Home</Link></Button>
-                    <Button my={2}><Link to="/ProductCatalog" >Product Catalog</Link></Button>
-                    
-                    <Button><Link to="/Admin" >Admin</Link></Button>
-            
-                </Grid>                
-            </Grid>
-        </Box>
-    )
-}  
+import Box from "@mui/material/Box";
+
+import Toolbar from "@mui/material/Toolbar";
+
+import Typography from "@mui/material/Typography";
+
+import Button from "@mui/material/Button";
+
+import IconButton from "@mui/material/IconButton";
+
+import MenuIcon from "@mui/icons-material/Menu";
+
+import { Link, MenuItem, Menu } from "@mui/material";
+
+import logo from "../assets/logo.png";
+
+export default function NavBar() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const menuId = "primary-menu";
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>
+        <Link href="#" color="inherit" sx={{ textDecoration: "none" }}>
+          Product
+        </Link>
+      </MenuItem>
+
+      <MenuItem onClick={handleMenuClose}>
+        <Link href="#" color="inherit" sx={{ textDecoration: "none" }}>
+          About
+        </Link>
+      </MenuItem>
+
+      <MenuItem onClick={handleMenuClose}>
+        <Link href="#" color="inherit" sx={{ textDecoration: "none" }}>
+          Contact
+        </Link>
+      </MenuItem>
+    </Menu>
+  );
+
+  return (
+    <AppBar position="static" color="default" elevation={1} py={3}>
+      <Box container>
+        <Toolbar
+          sx={{
+            marginLeft: { xs: "0", md: "5%" },
+
+            marginRight: { xs: "0", md: "5%" },
+          }}
+        >
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Box
+              sx={{
+                width: { xs: "10rem", md: "15rem" },
+              }}
+            >
+              <img
+                style={{ width: "100%", padding: "5%" }}
+                src={logo}
+                alt="Hero"
+              />
+            </Box>
+          </Typography>
+
+          <Box sx={{ display: { xs: "none", md: "block" } }}>
+            <Link
+              href="#"
+              color="inherit"
+              sx={{ mx: 2, textDecoration: "none" }}
+            >
+              Product
+            </Link>
+
+            <Link
+              href="#"
+              color="inherit"
+              sx={{ mx: 2, textDecoration: "none" }}
+            >
+              About
+            </Link>
+
+            <Link
+              href="#"
+              color="inherit"
+              sx={{ mx: 2, textDecoration: "none" }}
+            >
+              Contact
+            </Link>
+          </Box>
+
+          <Box sx={{ display: { xs: "block", md: "none" } }}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleMenuOpen}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </Box>
+
+      {renderMenu}
+    </AppBar>
+  );
+}
