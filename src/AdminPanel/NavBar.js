@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import App from "./App.css"
 import AppBar from "@mui/material/AppBar";
 
 import Box from "@mui/material/Box";
@@ -44,19 +44,19 @@ export default function NavBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>
-        <Link href="#" color="inherit" sx={{ textDecoration: "none" }}>
+        <Link href="#" color="inherit" className="Navstyles">
           Product
         </Link>
       </MenuItem>
 
       <MenuItem onClick={handleMenuClose}>
-        <Link href="#" color="inherit" sx={{ textDecoration: "none" }}>
+        <Link href="aboutus" color="inherit" className="Navstyles">
           About
         </Link>
       </MenuItem>
 
       <MenuItem onClick={handleMenuClose}>
-        <Link href="#" color="inherit" sx={{ textDecoration: "none" }}>
+        <Link href="#" color="inherit" className="Navstyles">
           Contact
         </Link>
       </MenuItem>
@@ -64,7 +64,7 @@ export default function NavBar() {
   );
 
   return (
-    <AppBar position="static" color="default" elevation={1} py={3}>
+    <AppBar position="static" color="default" elevation={1} py={3} >
       <Box container>
         <Toolbar
           sx={{
@@ -91,15 +91,17 @@ export default function NavBar() {
             <Link
               href="#"
               color="inherit"
-              sx={{ mx: 2, textDecoration: "none" }}
+              className="Navstyles"
+              sx={{ mx: 2, textDecoration: "none", fontSize:17, fontWeight:600 }}
             >
               Product
             </Link>
 
             <Link
-              href="#"
+              href="aboutus"
               color="inherit"
-              sx={{ mx: 2, textDecoration: "none" }}
+              className="Navstyles"
+              sx={{ mx: 2, textDecoration: "none", fontSize:17, fontWeight:600 }}
             >
               About
             </Link>
@@ -107,7 +109,8 @@ export default function NavBar() {
             <Link
               href="#"
               color="inherit"
-              sx={{ mx: 2, textDecoration: "none" }}
+              className="Navstyles"
+              sx={{ mx: 2, textDecoration: "none", fontSize:17, fontWeight:600 }}
             >
               Contact
             </Link>

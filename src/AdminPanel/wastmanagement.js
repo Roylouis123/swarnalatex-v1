@@ -13,7 +13,6 @@ export default function WastManagemant () {
         <>        
         <Box 
          sx={{backgroundColor: '#33b137'}}>
-            <NavBar/>
             <Box p={2}>
                 <Grid container md={11} xs={12}
                  sx={{margin: 'auto'}}>

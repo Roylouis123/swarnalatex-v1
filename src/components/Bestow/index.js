@@ -6,6 +6,7 @@ import {
   Stack,
   Button,
   Modal,
+  Divider,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
@@ -82,7 +83,8 @@ export default function Bestow() {
   const handleClick = (data) => {
     setSelectedProductID(data);
 
-    const filteredProducts = filter(product, (p) => p.Id === data);
+    const filteredProducts = filter(product, (p) => p.Id === "Bestow");
+    console.log(filteredProducts)
     setSelectedProductName(filteredProducts);
     setSelectedColors("");
     setSelectedLinnings("");
@@ -128,17 +130,9 @@ export default function Bestow() {
           margin: "auto",
         }}
       >
-        <Grid md={8}>
-          <Typography
-            variant="h3"
-            mb={2}
-            sx={{ backgroundColor: "orange", color: "white" }}
-          >
-            Bistow
-          </Typography>
-        </Grid>
         <Grid
           item
+          xs={12}
           md={6}
           py={4}
           pr={1}
@@ -148,31 +142,58 @@ export default function Bestow() {
             flexDirection: "column",
           }}
         >
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Types : </Typography>
-            {map(product, (u, i) => (
-              <Box
-                key={i}
-                onClick={() => {
-                  handleClick(u.Id);
-                  setSelectedProductID(u.ProductID);
-                }}
-              >
-                <Chip
-                  sx={{ cursor: "pointer" }}
-                  label={u.ProductID}
-                  variant="outlined"
-                />
-              </Box>
-            ))}
-          </Stack>
+          <Typography
+            variant="h3"
+            mb={4}
+            sx={{ backgroundColor: "orange", color: "white" }}
+          >
+            Bistow
+          </Typography>
 
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Available Models : </Typography>
+          <Stack direction="row" spacing={1} my={1} alignItems="center">
+            <Typography variant="p"
+              sx={{ color: "black", width: 'rem' }}> Types : </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {map(product, (u, i) => (
+                <Box
+                  sx={{ marginTop: '5px', marginLeft: '5px' }}
+                  key={i}
+                  onClick={() => {
+                    handleClick(u.Id);
+                    setSelectedProductID(u.ProductID);
+                  }}
+                >
+                  <Chip
+                    sx={{
+                      marginTop: '5px',
+                      marginLeft: '5px',
+                      borderColor: 'black',
+                      color: 'black',
+                      backgroundColor: selectedSizes.includes(u.Size)
+                        ? "orange"
+                        : "white",
+                      cursor: "pointer",
+                    }}
+                    label={u.ProductID}
+                    variant="outlined"
+                  />
+                </Box>
+              ))}
+            </Box>
+          </Stack>
+          <Divider />
+
+          <Stack direction="row" spacing={1} my={1} alignItems="center">
+            <Typography variant="p"
+              sx={{ color: "black", width: '4rem' }}>  Models : </Typography>
             {map(selectedProductName, (u, i) => (
               <Box key={i}>
                 <Chip
                   sx={{
+                    marginTop: '5px',
+                    marginLeft: '5px',
+                    borderColor: 'black',
+                    color: 'black',
                     cursor: "pointer",
                     backgroundColor: "orange",
                   }}
@@ -182,109 +203,136 @@ export default function Bestow() {
               </Box>
             ))}
           </Stack>
+          <Divider />
 
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Available Sizes : </Typography>
-            {map(selectedProductName, (o, i) =>
-              map(o.selectedSizes, (u) => (
-                <Box
-                  key={i}
-                  item
-                  xs="auto"
-                  onClick={() => {
-                    handleSizeClick(u.Size);
-                    setusetypes(o.usetypes);
-                  }}
-                >
-                  <Chip
-                    label={u.Size}
-                    variant="outlined"
-                    selected={selectedSizes.includes(u.Size)}
-                    sx={{
-                      backgroundColor: selectedSizes.includes(u.Size)
-                        ? "orange"
-                        : "white",
-                      borderColor: "rgb(0,0,0,0.87)",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Box>
-              ))
-            )}
-          </Stack>
-
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Available Linning : </Typography>
-            {map(selectedProductName, (o, i) =>
-              map(o.selectedLinning, (u) => (
-                <Box
-                  item
-                  xs="auto"
-                  onClick={() => handleLinningClick(u.Linning)}
-                >
-                  <Chip
+          <Stack direction="row" spacing={1} my={1} alignItems="center">
+            <Typography variant="p"
+              sx={{ color: "black", width: '4rem' }}>  Sizes : </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {map(selectedProductName, (o, i) =>
+                map(o.selectedSizes, (u) => (
+                  <Box
                     key={i}
-                    label={u.Linning}
-                    variant="outlined"
-                    selected={selectedLinnings.includes(u.Linning)}
-                    sx={{
-                      backgroundColor: selectedLinnings.includes(u.Linning)
-                        ? "orange"
-                        : "white",
-                      borderColor: "rgb(0,0,0,0.87)",
-                      cursor: "pointer",
+                    item
+                    xs="auto"
+                    onClick={() => {
+                      handleSizeClick(u.Size);
+                      setusetypes(o.usetypes);
                     }}
-                  />
-                </Box>
-              ))
-            )}
+                  >
+                    <Chip
+                      label={u.Size}
+                      variant="outlined"
+                      selected={selectedSizes.includes(u.Size)}
+                      sx={{
+                        marginTop: '5px',
+                        marginLeft: '5px',
+                        borderColor: 'black',
+                        color: 'black',
+                        backgroundColor: selectedSizes.includes(u.Size)
+                          ? "orange"
+                          : "white",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Box>
+                ))
+              )}
+            </Box>
           </Stack>
+          <Divider />
 
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Available Colors : </Typography>
-            {map(selectedProductName, (o, i) =>
-              map(o.selectedColors, (u) => (
-                <Box item xs="auto" onClick={() => handleColorsClick(u.Colors)}>
-                  <Chip
-                    key={i}
-                    label={u.Colors}
-                    variant="outlined"
-                    selected={selectedColors.includes(u.Colors)}
-                    sx={{
-                      backgroundColor: selectedColors.includes(u.Colors)
-                        ? "orange"
-                        : "white",
-                      borderColor: "rgb(0,0,0,0.87)",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Box>
-              ))
-            )}
+          <Stack direction="row" spacing={1} my={1} alignItems="center">
+            <Typography variant="p"
+              sx={{ color: "black", width: '4rem', }}>  Linning : </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {map(selectedProductName, (o, i) =>
+                map(o.selectedLinning, (u) => (
+                  <Box
+                    item
+                    xs="auto"
+                    onClick={() => handleLinningClick(u.Linning)}
+                  >
+                    <Chip
+                      key={i}
+                      label={u.Linning}
+                      variant="outlined"
+                      selected={selectedLinnings.includes(u.Linning)}
+                      sx={{
+                        marginTop: '5px',
+                        marginLeft: '5px',
+                        borderColor: 'black',
+                        color: 'black',
+                        backgroundColor: selectedLinnings.includes(u.Linning)
+                          ? "orange"
+                          : "white",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Box>
+                ))
+              )}
+            </Box>
           </Stack>
+          <Divider />
 
-          <Stack direction="row" spacing={1} my={2} alignItems="center">
-            <Typography variant="h5">Available Stroke : </Typography>
-            {map(selectedProductName, (o, i) =>
-              map(o.selectedstroke, (u) => (
-                <Box item xs="auto" onClick={() => handlestrokeClick(u.Stroke)}>
-                  <Chip
-                    key={i}
-                    label={u.Stroke}
-                    variant="outlined"
-                    selected={selectedstroke.includes(u.Stroke)}
-                    sx={{
-                      backgroundColor: selectedstroke.includes(u.Stroke)
-                        ? "orange"
-                        : "white",
-                      borderColor: "rgb(0,0,0,0.87)",
-                      cursor: "pointer",
-                    }}
-                  />
-                </Box>
-              ))
-            )}
+          <Stack direction="row" spacing={1} my={1} alignItems="center">
+            <Typography variant="p"
+              sx={{ color: "black", width: '4rem' }}>  Colors : </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {map(selectedProductName, (o, i) =>
+                map(o.selectedColors, (u) => (
+                  <Box item xs="auto" sx={{ marginTop: '5px', marginLeft: '5px' }} onClick={() => handleColorsClick(u.Colors)}>
+                    <Chip
+                      key={i}
+                      label={u.Colors}
+                      variant="outlined"
+                      selected={selectedColors.includes(u.Colors)}
+                      sx={{
+                        borderColor: 'black',
+                        color: 'black',
+                        backgroundColor: selectedColors.includes(u.Colors)
+                          ? "orange"
+                          : "white",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Box>
+                ))
+              )}
+            </Box>
           </Stack>
+          <Divider />
+
+          <Stack direction="row" spacing={1} my={1} alignItems="center">
+            <Typography variant="p"
+              sx={{ color: "black", width: '4rem' }}>  Stroke : </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {map(selectedProductName, (o, i) =>
+                map(o.selectedstroke, (u) => (
+                  <Box item xs="auto" onClick={() => handlestrokeClick(u.Stroke)}>
+                    <Chip
+                      key={i}
+                      label={u.Stroke}
+                      variant="outlined"
+                      selected={selectedstroke.includes(u.Stroke)}
+                      sx={{
+                        marginTop: '5px',
+                        marginLeft: '5px',
+                        borderColor: 'black',
+                        color: 'black',
+                        backgroundColor: selectedstroke.includes(u.Stroke)
+                          ? "orange"
+                          : "white",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Box>
+                ))
+              )}
+            </Box>
+          </Stack>
+          <Divider />
 
           <MyComponent Alldata={Alldata} />
         </Grid>
@@ -302,7 +350,7 @@ export default function Bestow() {
           <img style={{ width: "100%" }} src={heroImg} alt="Hero" />
         </Grid>
       </Grid>
-    </Box>
+    </Box >
   );
 }
 
@@ -315,10 +363,10 @@ const MyComponent = ({ Alldata }) => {
   return (
     <>
       {Alldata?.Color &&
-      Alldata.Linning &&
-      Alldata.ProductID &&
-      Alldata.Stroke &&
-      Alldata.usetypes ? (
+        Alldata.Linning &&
+        Alldata.ProductID &&
+        Alldata.Stroke &&
+        Alldata.usetypes ? (
         <Box>
           <Button
             variant="contained"

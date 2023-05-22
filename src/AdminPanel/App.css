@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+
+.Navstyles {
+  text-decoration: none;
+  color: inherit;
+}
+
+.Navstyles:hover,
+.Navstyles:focus,
+.Navstyles:active {
+  padding-bottom: 3px; /* Add space for underline */
+  border-bottom: 2.5px solid rgb(8, 129, 205); /* Change the color to dark yellow */
+}
