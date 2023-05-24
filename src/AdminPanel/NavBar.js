@@ -17,7 +17,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CancelIcon from "@mui/icons-material/Cancel";
 import logo from "../assets/logo.png";
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   underline: {
-    
     marginTop: "5px",
     borderBottom: `3px solid pink`, // Change the border color here
   },
@@ -55,11 +54,20 @@ export default function NavBar() {
 
   const renderMobileMenu = (
     <Drawer anchor="top" open={mobileOpen} onClose={handleCloseDrawer}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        p={2}
+      >
         <Typography variant="h6" component="div">
           <img style={{ width: "50%" }} src={logo} alt="Logo" />
         </Typography>
-        <IconButton color="inherit" aria-label="cancel" onClick={handleCloseDrawer}>
+        <IconButton
+          color="inherit"
+          aria-label="cancel"
+          onClick={handleCloseDrawer}
+        >
           <CancelIcon fontSize="large" />
         </IconButton>
       </Box>
@@ -74,7 +82,9 @@ export default function NavBar() {
             primary="Product"
             primaryTypographyProps={{
               className:
-                location.pathname === "/ProductCatalog" ? classes.underline : "",
+                location.pathname === "/ProductCatalog"
+                  ? classes.underline
+                  : "",
             }}
           />
         </ListItem>
@@ -87,7 +97,8 @@ export default function NavBar() {
           <ListItemText
             primary="About"
             primaryTypographyProps={{
-              className: location.pathname === "/aboutus" ? classes.underline : "",
+              className:
+                location.pathname === "/aboutus" ? classes.underline : "",
             }}
           />
         </ListItem>
@@ -100,7 +111,8 @@ export default function NavBar() {
           <ListItemText
             primary="Contact"
             primaryTypographyProps={{
-              className: location.pathname === "/contactus" ? classes.underline : "",
+              className:
+                location.pathname === "/contactus" ? classes.underline : "",
             }}
           />
         </ListItem>
@@ -120,23 +132,29 @@ export default function NavBar() {
           }`,
         }}
       >
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          {isMobile ? (
-            <img style={{ width: "50%", padding: "3%" }} src={logo} alt="Logo" />
-          ) : (
-            <Box
-              sx={{
-                width: "12rem",
-              }}
-            >
+        <RouterLink to="/">
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {isMobile ? (
               <img
-                style={{ width: "100%", padding: "5%" }}
+                style={{ width: "50%", padding: "3%" }}
                 src={logo}
                 alt="Logo"
               />
-            </Box>
-          )}
-        </Typography>
+            ) : (
+              <Box
+                sx={{
+                  width: "12rem",
+                }}
+              >
+                <img
+                  style={{ width: "100%", padding: "5%" }}
+                  src={logo}
+                  alt="Logo"
+                />
+              </Box>
+            )}
+          </Typography>
+        </RouterLink>
         {isMobile ? (
           <IconButton
             edge="end"
@@ -159,7 +177,9 @@ export default function NavBar() {
                 component="span"
                 fontWeight={600}
                 className={
-                  location.pathname === "/ProductCatalog" ? classes.underline : ""
+                  location.pathname === "/ProductCatalog"
+                    ? classes.underline
+                    : ""
                 }
               >
                 Product
@@ -175,7 +195,9 @@ export default function NavBar() {
                 variant="body1"
                 component="span"
                 fontWeight={600}
-                className={location.pathname === "/aboutus" ? classes.underline : ""}
+                className={
+                  location.pathname === "/aboutus" ? classes.underline : ""
+                }
               >
                 About
               </Typography>
@@ -190,7 +212,9 @@ export default function NavBar() {
                 variant="body1"
                 component="span"
                 fontWeight={600}
-                className={location.pathname === "/contactus" ? classes.underline : ""}
+                className={
+                  location.pathname === "/contactus" ? classes.underline : ""
+                }
               >
                 Contact
               </Typography>

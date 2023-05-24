@@ -25,7 +25,6 @@ export default function Bestow() {
   const [Alldata, setAlldata] = useState({});
   const [selectedProductID, setSelectedProductID] = useState("");
   const [selectedProductName, setSelectedProductName] = useState([]);
-
   useEffect(() => {
     setAlldata({
       ProductID: selectedProductID,
@@ -51,7 +50,10 @@ export default function Bestow() {
       querySnapshot.forEach((doc) => {
         caall.push(doc.data());
       });
-      const formattedData = map(caall, (item) => {
+
+      const filterboy = filter(caall, (u) => u.type === "Bestow");
+
+      const formattedData = map(filterboy, (item) => {
         const formattedLinning = map(item.selectedLinning, (Linning) => ({
           Linning: Linning,
         }));
@@ -83,8 +85,7 @@ export default function Bestow() {
   const handleClick = (data) => {
     setSelectedProductID(data);
 
-    const filteredProducts = filter(product, (p) => p.Id === "Bestow");
-    console.log(filteredProducts)
+    const filteredProducts = filter(product, (p) => p.Id === data);
     setSelectedProductName(filteredProducts);
     setSelectedColors("");
     setSelectedLinnings("");
@@ -147,16 +148,13 @@ export default function Bestow() {
             mb={4}
             sx={{ backgroundColor: "orange", color: "white" }}
           >
-            Bistow
+            Bestow
           </Typography>
-
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "black", width: 'rem' }}> Types : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}> Types : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(product, (u, i) => (
                 <Box
-                  sx={{ marginTop: '5px', marginLeft: '5px' }}
                   key={i}
                   onClick={() => {
                     handleClick(u.Id);
@@ -165,14 +163,9 @@ export default function Bestow() {
                 >
                   <Chip
                     sx={{
-                      marginTop: '5px',
-                      marginLeft: '5px',
-                      borderColor: 'black',
-                      color: 'black',
-                      backgroundColor: selectedSizes.includes(u.Size)
-                        ? "orange"
-                        : "white",
                       cursor: "pointer",
+                      borderColor: "rgb(0,0,0,0.87)",
+                      margin: "4px",
                     }}
                     label={u.ProductID}
                     variant="outlined"
@@ -184,30 +177,28 @@ export default function Bestow() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "black", width: '4rem' }}>  Models : </Typography>
-            {map(selectedProductName, (u, i) => (
-              <Box key={i}>
-                <Chip
-                  sx={{
-                    marginTop: '5px',
-                    marginLeft: '5px',
-                    borderColor: 'black',
-                    color: 'black',
-                    cursor: "pointer",
-                    backgroundColor: "orange",
-                  }}
-                  label={u.usetypes}
-                  variant="outlined"
-                />
-              </Box>
-            ))}
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Models : </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              {map(selectedProductName, (u, i) => (
+                <Box key={i}>
+                  <Chip
+                    sx={{
+                      borderColor: "rgb(0,0,0,0.87)",
+                      cursor: "pointer",
+                      backgroundColor: "orange",
+                      margin: "4px",
+                    }}
+                    label={u.usetypes}
+                    variant="outlined"
+                  />
+                </Box>
+              ))}
+            </Box>
           </Stack>
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "black", width: '4rem' }}>  Sizes : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Sizes : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedSizes, (u) => (
@@ -225,14 +216,12 @@ export default function Bestow() {
                       variant="outlined"
                       selected={selectedSizes.includes(u.Size)}
                       sx={{
-                        marginTop: '5px',
-                        marginLeft: '5px',
-                        borderColor: 'black',
-                        color: 'black',
                         backgroundColor: selectedSizes.includes(u.Size)
                           ? "orange"
                           : "white",
+                        borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -243,8 +232,7 @@ export default function Bestow() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "black", width: '4rem', }}>  Linning : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Linning : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedLinning, (u) => (
@@ -259,14 +247,12 @@ export default function Bestow() {
                       variant="outlined"
                       selected={selectedLinnings.includes(u.Linning)}
                       sx={{
-                        marginTop: '5px',
-                        marginLeft: '5px',
-                        borderColor: 'black',
-                        color: 'black',
                         backgroundColor: selectedLinnings.includes(u.Linning)
                           ? "orange"
                           : "white",
+                        borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -277,24 +263,23 @@ export default function Bestow() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "black", width: '4rem' }}>  Colors : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Colors : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedColors, (u) => (
-                  <Box item xs="auto" sx={{ marginTop: '5px', marginLeft: '5px' }} onClick={() => handleColorsClick(u.Colors)}>
+                  <Box item xs="auto" onClick={() => handleColorsClick(u.Colors)}>
                     <Chip
                       key={i}
                       label={u.Colors}
                       variant="outlined"
                       selected={selectedColors.includes(u.Colors)}
                       sx={{
-                        borderColor: 'black',
-                        color: 'black',
                         backgroundColor: selectedColors.includes(u.Colors)
                           ? "orange"
                           : "white",
+                        borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -305,8 +290,7 @@ export default function Bestow() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "black", width: '4rem' }}>  Stroke : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Stroke : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedstroke, (u) => (
@@ -317,14 +301,12 @@ export default function Bestow() {
                       variant="outlined"
                       selected={selectedstroke.includes(u.Stroke)}
                       sx={{
-                        marginTop: '5px',
-                        marginLeft: '5px',
-                        borderColor: 'black',
-                        color: 'black',
                         backgroundColor: selectedstroke.includes(u.Stroke)
                           ? "orange"
                           : "white",
+                        borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -350,10 +332,9 @@ export default function Bestow() {
           <img style={{ width: "100%" }} src={heroImg} alt="Hero" />
         </Grid>
       </Grid>
-    </Box >
+    </Box>
   );
 }
-
 const MyComponent = ({ Alldata }) => {
   const [open, setOpen] = useState(false);
 

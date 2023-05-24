@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-
 import { useTheme } from "@mui/material/styles";
-
 import { Box, useMediaQuery } from "@mui/material";
 
 const BackgroundCarousel = ({ images }) => {
   const theme = useTheme();
-
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -26,9 +22,7 @@ const BackgroundCarousel = ({ images }) => {
   };
 
   const handlePrev = () => {
-    setActiveIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length
-    );
+    setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
   return (
@@ -45,23 +39,14 @@ const BackgroundCarousel = ({ images }) => {
           key={index}
           sx={{
             position: "absolute",
-
             top: 0,
-
             left: 0,
-
             width: "100%",
-
-            height: "850px",
-
+            height: "100%",
             background: `url(${image})`,
-
             backgroundSize: "cover",
-
             backgroundPosition: "center",
-
             opacity: index === activeIndex ? 1 : 0,
-
             transition: "opacity 0.5s ease-in-out",
           }}
         />

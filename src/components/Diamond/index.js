@@ -1,4 +1,4 @@
-import {
+ import {
   Box,
   Grid,
   Typography,
@@ -15,7 +15,7 @@ import { map, filter } from "lodash";
 import Checkout from "../CheckoutForm/Checkout";
 import heroImg from "../../assets/hero.png";
 
-export default function Diamond() {
+export default function Bestow() {
   const [product, setProduct] = useState([]);
   const [usetypes, setusetypes] = useState("");
   const [selectedSizes, setSelectedSizes] = useState("");
@@ -25,7 +25,6 @@ export default function Diamond() {
   const [Alldata, setAlldata] = useState({});
   const [selectedProductID, setSelectedProductID] = useState("");
   const [selectedProductName, setSelectedProductName] = useState([]);
-
   useEffect(() => {
     setAlldata({
       ProductID: selectedProductID,
@@ -147,13 +146,12 @@ export default function Diamond() {
           <Typography
             variant="h3"
             mb={4}
-            sx={{ backgroundColor: "orange", color: "white" }}
+            sx={{ backgroundColor: "3FB2DE", color: "white" }}
           >
             Diamond
           </Typography>
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "grey", width: '4rem' }}> Types : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}> Types : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(product, (u, i) => (
                 <Box
@@ -164,7 +162,11 @@ export default function Diamond() {
                   }}
                 >
                   <Chip
-                    sx={{ cursor: "pointer", borderColor: "rgb(0,0,0,0.87)", }}
+                    sx={{
+                      cursor: "pointer",
+                      borderColor: "rgb(0,0,0,0.87)",
+                      margin: "4px",
+                    }}
                     label={u.ProductID}
                     variant="outlined"
                   />
@@ -175,8 +177,7 @@ export default function Diamond() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "grey", width: '4rem' }}>  Models : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Models : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (u, i) => (
                 <Box key={i}>
@@ -185,6 +186,7 @@ export default function Diamond() {
                       borderColor: "rgb(0,0,0,0.87)",
                       cursor: "pointer",
                       backgroundColor: "orange",
+                      margin: "4px",
                     }}
                     label={u.usetypes}
                     variant="outlined"
@@ -196,8 +198,7 @@ export default function Diamond() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "grey", width: '4rem' }}>  Sizes : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Sizes : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedSizes, (u) => (
@@ -220,6 +221,7 @@ export default function Diamond() {
                           : "white",
                         borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -230,8 +232,7 @@ export default function Diamond() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "grey", width: '4rem' }}>  Linning : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Linning : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedLinning, (u) => (
@@ -251,6 +252,7 @@ export default function Diamond() {
                           : "white",
                         borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -261,8 +263,7 @@ export default function Diamond() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "grey", width: '4rem' }}>  Colors : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Colors : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedColors, (u) => (
@@ -278,6 +279,7 @@ export default function Diamond() {
                           : "white",
                         borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -288,8 +290,7 @@ export default function Diamond() {
           <Divider />
 
           <Stack direction="row" spacing={1} my={1} alignItems="center">
-            <Typography variant="p"
-              sx={{ color: "grey", width: '4rem' }}>  Stroke : </Typography>
+            <Typography variant="p" sx={{ color: "grey", width: '4rem' }}>  Stroke : </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
               {map(selectedProductName, (o, i) =>
                 map(o.selectedstroke, (u) => (
@@ -305,6 +306,7 @@ export default function Diamond() {
                           : "white",
                         borderColor: "rgb(0,0,0,0.87)",
                         cursor: "pointer",
+                        margin: "4px",
                       }}
                     />
                   </Box>
@@ -333,7 +335,6 @@ export default function Diamond() {
     </Box>
   );
 }
-
 const MyComponent = ({ Alldata }) => {
   const [open, setOpen] = useState(false);
 
