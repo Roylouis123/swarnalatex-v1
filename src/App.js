@@ -12,6 +12,8 @@ import Diamond from "./components/Diamond";
 import SoftTouch from "./components/SoftToch";
 import AboutUs from "./AdminPanel/AboutUs";
 import NavBar from "./AdminPanel/NavBar";
+import Footer from "./AdminPanel/Footer";
+import ContactUsPage from "./AdminPanel/ContactUs";
 
 function App() {
   return (
@@ -29,7 +31,9 @@ function App() {
         <Route path="/diamondform" element={<DiamondForm />} />
         <Route path="/softtouchform" element={<SoftTouchForm />} />
         <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/contactus" element={<ContactUsPage />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

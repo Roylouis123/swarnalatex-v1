@@ -1,135 +1,204 @@
-import * as React from "react";
-import App from "./App.css"
-import AppBar from "@mui/material/AppBar";
-
-import Box from "@mui/material/Box";
-
-import Toolbar from "@mui/material/Toolbar";
-
-import Typography from "@mui/material/Typography";
-
-import Button from "@mui/material/Button";
-
-import IconButton from "@mui/material/IconButton";
-
+import React from "react";
+import { Link as RouterLink, useLocation } from "react-router-dom";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-
-import { Link, MenuItem, Menu } from "@mui/material";
-
+import CancelIcon from "@mui/icons-material/Cancel";
 import logo from "../assets/logo.png";
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles((theme) => ({
+  listItem: {
+    "&:hover": {
+      backgroundColor: "grey",
+    },
+  },
+  selectedListItem: {
+    backgroundColor: "grey",
+    "&:hover": {
+      backgroundColor: "grey",
+    },
+  },
+  underline: {
+    
+    marginTop: "5px",
+    borderBottom: `3px solid pink`, // Change the border color here
+  },
+}));
 
 export default function NavBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const classes = useStyles();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const location = useLocation();
 
-  const isMenuOpen = Boolean(anchorEl);
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleCloseDrawer = () => {
+    setMobileOpen(false);
   };
 
-  const menuId = "primary-menu";
-
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>
-        <Link href="#" color="inherit" className="Navstyles">
-          Product
-        </Link>
-      </MenuItem>
-
-      <MenuItem onClick={handleMenuClose}>
-        <Link href="aboutus" color="inherit" className="Navstyles">
-          About
-        </Link>
-      </MenuItem>
-
-      <MenuItem onClick={handleMenuClose}>
-        <Link href="#" color="inherit" className="Navstyles">
-          Contact
-        </Link>
-      </MenuItem>
-    </Menu>
+  const renderMobileMenu = (
+    <Drawer anchor="top" open={mobileOpen} onClose={handleCloseDrawer}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" p={2}>
+        <Typography variant="h6" component="div">
+          <img style={{ width: "50%" }} src={logo} alt="Logo" />
+        </Typography>
+        <IconButton color="inherit" aria-label="cancel" onClick={handleCloseDrawer}>
+          <CancelIcon fontSize="large" />
+        </IconButton>
+      </Box>
+      <List sx={{ width: 200 }} onClick={handleCloseDrawer}>
+        <ListItem
+          button
+          component={RouterLink}
+          to="/ProductCatalog"
+          className={classes.listItem}
+        >
+          <ListItemText
+            primary="Product"
+            primaryTypographyProps={{
+              className:
+                location.pathname === "/ProductCatalog" ? classes.underline : "",
+            }}
+          />
+        </ListItem>
+        <ListItem
+          button
+          component={RouterLink}
+          to="/aboutus"
+          className={classes.listItem}
+        >
+          <ListItemText
+            primary="About"
+            primaryTypographyProps={{
+              className: location.pathname === "/aboutus" ? classes.underline : "",
+            }}
+          />
+        </ListItem>
+        <ListItem
+          button
+          component={RouterLink}
+          to="/contactus"
+          className={classes.listItem}
+        >
+          <ListItemText
+            primary="Contact"
+            primaryTypographyProps={{
+              className: location.pathname === "/contactus" ? classes.underline : "",
+            }}
+          />
+        </ListItem>
+      </List>
+    </Drawer>
   );
 
   return (
-    <AppBar position="static" color="default" elevation={1} py={3} >
-      <Box container>
-        <Toolbar
-          sx={{
-            marginLeft: { xs: "0", md: "5%" },
-
-            marginRight: { xs: "0", md: "5%" },
-          }}
-        >
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    <AppBar position="static" color="default" elevation={1}>
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+          borderBottom: `2px solid ${
+            location.pathname === "/ProductCatalog"
+              ? theme.palette.secondary.main
+              : "transparent"
+          }`,
+        }}
+      >
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          {isMobile ? (
+            <img style={{ width: "50%", padding: "3%" }} src={logo} alt="Logo" />
+          ) : (
             <Box
               sx={{
-                width: { xs: "10rem", md: "15rem" },
+                width: "12rem",
               }}
             >
               <img
                 style={{ width: "100%", padding: "5%" }}
                 src={logo}
-                alt="Hero"
+                alt="Logo"
               />
             </Box>
-          </Typography>
-
-          <Box sx={{ display: { xs: "none", md: "block" } }}>
-            <Link
-              href="#"
+          )}
+        </Typography>
+        {isMobile ? (
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon fontSize="large" />
+          </IconButton>
+        ) : (
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            <Button
+              component={RouterLink}
+              to="/ProductCatalog"
               color="inherit"
-              className="Navstyles"
-              sx={{ mx: 2, textDecoration: "none", fontSize:17, fontWeight:600 }}
+              sx={{ mx: 2 }}
             >
-              Product
-            </Link>
-
-            <Link
-              href="aboutus"
+              <Typography
+                variant="body1"
+                component="span"
+                fontWeight={600}
+                className={
+                  location.pathname === "/ProductCatalog" ? classes.underline : ""
+                }
+              >
+                Product
+              </Typography>
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/aboutus"
               color="inherit"
-              className="Navstyles"
-              sx={{ mx: 2, textDecoration: "none", fontSize:17, fontWeight:600 }}
+              sx={{ mx: 2 }}
             >
-              About
-            </Link>
-
-            <Link
-              href="#"
+              <Typography
+                variant="body1"
+                component="span"
+                fontWeight={600}
+                className={location.pathname === "/aboutus" ? classes.underline : ""}
+              >
+                About
+              </Typography>
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/contactus"
               color="inherit"
-              className="Navstyles"
-              sx={{ mx: 2, textDecoration: "none", fontSize:17, fontWeight:600 }}
+              sx={{ mx: 2 }}
             >
-              Contact
-            </Link>
+              <Typography
+                variant="body1"
+                component="span"
+                fontWeight={600}
+                className={location.pathname === "/contactus" ? classes.underline : ""}
+              >
+                Contact
+              </Typography>
+            </Button>
           </Box>
-
-          <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              onClick={handleMenuOpen}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </Box>
-
-      {renderMenu}
+        )}
+      </Toolbar>
+      {isMobile && renderMobileMenu}
     </AppBar>
   );
 }
